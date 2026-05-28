@@ -434,12 +434,10 @@ public class AdditionalJewelryItems {
                 var id = Identifier.of(modifier.id);
                 var attribute = Registries.ATTRIBUTE.getEntry(id);
                 if (attribute.isPresent()) {
-
-                    // --- FIX STACKING BUG ---
-                    String safeAttributeName = id.getPath().replace(".", "_");
-                    Identifier dynamicModifierId = Identifier.of(AdditionalJewelry.MOD_ID,
-                            entry.id().getPath() + "_" + safeAttributeName + "_bonus");
-
+                    //SANITIZATION
+                    String rawPath = entry.id().getPath() + "_" + id.getPath() + "_bonus";
+                    String safePath = rawPath.toLowerCase(java.util.Locale.ROOT).replaceAll("[^a-z0-9/._-]", "_");
+                    Identifier dynamicModifierId = Identifier.of(AdditionalJewelry.MOD_ID, safePath);
                     attributes.add(attribute.get(),
                             new EntityAttributeModifier(
                                     dynamicModifierId,
